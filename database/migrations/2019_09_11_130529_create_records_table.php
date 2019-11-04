@@ -26,6 +26,7 @@ class CreateRecordsTable extends Migration
                   ->on('users'); 
             
             $table->string('status');
+            $table->string('passcode');
             $table->timestamps();
         });
     }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome-all.min.css') }}">
+    
 </head>
 
 <body id="page-top">
@@ -18,12 +19,12 @@
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
                     <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
                     <div class="sidebar-brand-text mx-3"><span>chmbox</span></div>
-                </a>
+                </a>  
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Borrow Code</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="blank.html"><i class="fas fa-window-maximize"></i><span>Return Code</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link {{ (strpos(Route::currentRouteName(), 'compartments.index') === 0) ? 'active' : '' }}" href="{{route('compartments.index')}}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link {{ (strpos(Route::currentRouteName(), 'records.index') === 0) ? 'active' : '' }}" href="{{route('records.index')}}"><i class="fas fa-user"></i><span>Records</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link {{ (strpos(Route::currentRouteName(), 'showPasscode') === 0) ? 'active' : '' }}" href="{{route('showPasscode')}}"><i class="fas fa-window-maximize"></i><span>Passcode</span></a></li>
                 </ul>
 
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
@@ -43,6 +44,9 @@
     <script src="{{ asset('assets/js/bs-charts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="{{ asset('assets/js/theme.js') }}"></script>
+    @stack('scripts')
+
+
 </body>
 
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Compartment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -16,7 +17,7 @@ class CompartmentCodeOrdered extends Mailable
      * 
      *  @var Compartment
      */
-     private $compartment;
+    private $compartment;
 
     /**
      * Create a new message instance.
@@ -25,7 +26,7 @@ class CompartmentCodeOrdered extends Mailable
      */
     public function __construct(Compartment $compartment)
     {
-        $this->compartment = $compartment
+        $this->compartment = $compartment;
     }
 
     /**
@@ -35,12 +36,12 @@ class CompartmentCodeOrdered extends Mailable
      */
     public function build()
     {
-        return $this->from('zhicong.tay@gmail.com')
-                    ->view('emails.compartmentcode.ordered')
+        return $this->from('admin@chmbox.tech')
+                    ->view('emails.compartmentcodeOrdered')
                     ->subject('Please retrive/ return your item')
                     ->with([
-                        'compartmentItem' => $this->compartment->item,
-                        'compartmentCode' => $this->compartment->code,
+                        'compartmentItem' => $this->compartment->item->name,
+                        'compartmentCode' => $this->compartment->passcode,
                     ]);
     }
 }

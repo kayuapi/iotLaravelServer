@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CompartmentCodeOrdered;
+use Illuminate\Support\Facades\Auth;
 use App\Compartment;
 use App\Item;
 use App\Record;
 use DB;
+
+
 
 class CompartmentsController extends Controller
 {
@@ -15,10 +20,10 @@ class CompartmentsController extends Controller
      *
      * @return void
      */
-//    public function __construct()
-//    {
-//        $this->middleware('auth');
-//    }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     
     /**
@@ -26,6 +31,9 @@ class CompartmentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     
+     
+     
     public function index()
     {
         $compartments = Compartment::where('emptied',0)->get();
@@ -37,7 +45,18 @@ class CompartmentsController extends Controller
             return $value;
         });
         
-        return view('compartments.index')->with('compartments', $itemCount);
+        $inBorrowingState = Record::where('user_id', Auth::id())->orderBy('created_at', 'desc')->first();
+        if (!$inBorrowingState) {
+            $inBorrowingState = False;
+        } else {
+            if ($inBorrowingState->status === 'borrow') {
+                $inBorrowingState = True;
+            } else {
+                $inBorrowingState = False;
+            }
+        }
+        
+        return view('compartments.index')->with(['compartments' => $itemCount, 'canBorrow' => $inBorrowingState]);
     }
 
     /**
@@ -99,23 +118,34 @@ class CompartmentsController extends Controller
             $compartment->passcode = $request->input('passcode');
             $compartment->save();            
             
+            $email = Record::where('compartment_id', $id)->orderBy('updated_at', 'desc')->first()->user->email;
+            
+            Mail::to($email)->send(new CompartmentCodeOrdered($compartment));
+
+            
         } elseif ($request->input('act') == 'return') {
             $compartment = Compartment::find($id);
             $compartment->emptied = 0;
             $compartment->passcode = $request->input('passcode');
             $compartment->save();
-            
-            
+
             
             $userId = Record::where('compartment_id', $id)->orderBy('updated_at', 'desc')->first()->user_id;
             $record = new Record;
             $record->compartment_id = $id;
             $record->user_id = $userId;
             $record->status = 'return';
+            $record->passcode = $compartment->passcode;
             $record->save();    
             
                       
         
+        } elseif ($request->input('act') == 'poweringUpLocker') {
+            $compartment = Compartment::find($id);
+            $compartment->emptied = 0;
+            $compartment->passcode = $request->input('passcode');
+            $compartment->save();            
+            
         } else {
         }
     }
@@ -139,7 +169,7 @@ class CompartmentsController extends Controller
      */
      public function borrow(Request $request)
      {
-        //dd($request);
+        //dd($request->get('item'));
         $requestdItemId = Item::where('name', $request->get('item'))->first()->id;
         $compartment = Compartment::where('item_id', $requestdItemId)
                                   ->where('emptied', 0)
@@ -151,11 +181,16 @@ class CompartmentsController extends Controller
         
         $record = new Record;
         $record->compartment_id = $compartment->id;
-        $record->user_id = \Auth::user()->id;
+        $record->user_id = Auth::id();
         $record->status = 'borrow';
+        $record->passcode = $compartment->passcode;
         $record->save();
 
-        return \Redirect::route('compartments.borrow');
+
+
+        Mail::to(Auth::user()->email)->send(new CompartmentCodeOrdered($compartment));
+
+        return \Redirect::route('compartments.index');
          
      }    
      

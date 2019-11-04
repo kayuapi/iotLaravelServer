@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/passcode', 'ShowPasscode')->name('showPasscode');
 
 Route::post('/compartments/borrow', 'CompartmentsController@borrow')->name('compartments.borrow');
 
@@ -28,3 +29,4 @@ Route::post('/compartments/borrow', 'CompartmentsController@borrow')->name('comp
 //    ]);
 
 Route::resource('compartments', 'CompartmentsController');
+Route::resource('records', 'RecordsController');

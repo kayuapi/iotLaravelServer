@@ -11,7 +11,7 @@
 				</div>
 				@if(count($compartments) > 0)
 				@foreach($compartments as $key=>$value)
-				<button name="entertainmentUnit" class="btn btn-sq-lg btn-primary" data-toggle="modal" data-target="#myModal" data-item={{ $key }}>
+				<button {{ $canBorrow ? 'disabled' : '' }} name="entertainmentUnit" class="btn btn-sq-lg btn-primary" data-toggle="modal" data-target="#myModal" data-item={{ $key }}>
 						<i class="fa fa-{{ $key }} fa-5x"></i><br/>
 						{{ $key }} <br> Available Unit: {{ $value }} 
 				</button>
@@ -51,23 +51,16 @@
 				  </div>
 				</div>
 			  </div>
-
-				    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/chart.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bs-charts.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="{{ asset('assets/js/theme.js') }}"></script>
-		<script type="text/javascript"> 
+			@push('scripts')
+			<script type="text/javascript"> 
 		
-			console.log('b');
-			$('#myModal').on("show.bs.modal", function (e) {
-				$("#modal-label").html($(e.relatedTarget).data('item'));
-				$("#compartment-item").val($(e.relatedTarget).data('item'));
-			});
-			console.log('a');
-		
-		</script>			  
+				$('#myModal').on("show.bs.modal", function (e) {
+					$("#modal-label").html($(e.relatedTarget).data('item'));
+					$("#compartment-item").val($(e.relatedTarget).data('item'));
+				});
+			
+			</script>
+			@endpush		  
         </div>
 
 
