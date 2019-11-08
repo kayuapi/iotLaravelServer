@@ -10,7 +10,7 @@ use App\Compartment;
 use App\Item;
 use App\Record;
 use DB;
-
+use mysql_xdevapi\Collection;
 
 
 class CompartmentsController extends Controller
@@ -24,27 +24,29 @@ class CompartmentsController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-     
-     
-     
+
+
+
     public function index()
     {
         $compartments = Compartment::where('emptied',0)->get();
+        $compartments = Compartment::all();
 
         $itemCount = $compartments->groupBy(function ($entry, $key) {return Item::find($entry['item_id'])->name;})
                                   ->map(function ($item_id) {return $item_id->count();});
-                       
-        $itemCount = $itemCount->sortByDesc(function($value) {
-            return $value;
-        });
-        
+
+        $myCollection = collect();
+        foreach ($itemCount as $key=>$value) {
+            $myCollection->put($key, collect(['icon' => Item::where('name', $key)->first()->icon, 'count' => $value]));
+        }
+
         $inBorrowingState = Record::where('user_id', Auth::id())->orderBy('created_at', 'desc')->first();
         if (!$inBorrowingState) {
             $inBorrowingState = False;
@@ -55,8 +57,8 @@ class CompartmentsController extends Controller
                 $inBorrowingState = False;
             }
         }
-        
-        return view('compartments.index')->with(['compartments' => $itemCount, 'canBorrow' => $inBorrowingState]);
+
+        return view('compartments.index')->with(['compartments' => $itemCount, 'canBorrow' => $inBorrowingState, 'collection' => $myCollection]);
     }
 
     /**
@@ -116,36 +118,36 @@ class CompartmentsController extends Controller
             $compartment = Compartment::find($id);
             $compartment->emptied = 1;
             $compartment->passcode = $request->input('passcode');
-            $compartment->save();            
-            
+            $compartment->save();
+
             $email = Record::where('compartment_id', $id)->orderBy('updated_at', 'desc')->first()->user->email;
-            
+
             Mail::to($email)->send(new CompartmentCodeOrdered($compartment));
 
-            
+
         } elseif ($request->input('act') == 'return') {
             $compartment = Compartment::find($id);
             $compartment->emptied = 0;
             $compartment->passcode = $request->input('passcode');
             $compartment->save();
 
-            
+
             $userId = Record::where('compartment_id', $id)->orderBy('updated_at', 'desc')->first()->user_id;
             $record = new Record;
             $record->compartment_id = $id;
             $record->user_id = $userId;
             $record->status = 'return';
             $record->passcode = $compartment->passcode;
-            $record->save();    
-            
-                      
-        
+            $record->save();
+
+
+
         } elseif ($request->input('act') == 'poweringUpLocker') {
             $compartment = Compartment::find($id);
             $compartment->emptied = 0;
             $compartment->passcode = $request->input('passcode');
-            $compartment->save();            
-            
+            $compartment->save();
+
         } else {
         }
     }
@@ -174,11 +176,11 @@ class CompartmentsController extends Controller
         $compartment = Compartment::where('item_id', $requestdItemId)
                                   ->where('emptied', 0)
                                   ->first();
-        
+
         $compartment->emptied = 1;
         $compartment->save();
-        
-        
+
+
         $record = new Record;
         $record->compartment_id = $compartment->id;
         $record->user_id = Auth::id();
@@ -191,10 +193,10 @@ class CompartmentsController extends Controller
         Mail::to(Auth::user()->email)->send(new CompartmentCodeOrdered($compartment));
 
         return \Redirect::route('compartments.index');
-         
-     }    
-     
-     
+
+     }
+
+
      public function return(Request $request)
      {
         //$compartment->passcode = '123456';
@@ -204,19 +206,19 @@ class CompartmentsController extends Controller
         //echo $request->get('passcode');
         echo $request->input('passcode');
         //echo $request;
-        
-        
-        
+
+
+
         //dd($request);
         //$requestdItemId = Item::where('name', $request->get('item'))->first()->id;
         //$compartment = Compartment::where('item_id', $requestdItemId)
                                   //->where('emptied', 0)
                                   //->first();
-        
+
         //$compartment->emptied = 1;
         //$compartment->save();
-        
-        
+
+
         //$record = new Record;
         //$record->compartment_id = $compartment->id;
         //$record->user_id = \Auth::user()->id;
@@ -224,8 +226,8 @@ class CompartmentsController extends Controller
         //$record->save();
 
         //return \Redirect::route('compartments.borrow');
-         
-     }         
 
-    
+     }
+
+
 }

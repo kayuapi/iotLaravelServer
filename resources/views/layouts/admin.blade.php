@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome-all.min.css') }}">
-    
+
 </head>
 
 <body id="page-top">
@@ -19,7 +19,7 @@
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
                     <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
                     <div class="sidebar-brand-text mx-3"><span>chmbox</span></div>
-                </a>  
+                </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item" role="presentation"><a class="nav-link {{ (strpos(Route::currentRouteName(), 'compartments.index') === 0) ? 'active' : '' }}" href="{{route('compartments.index')}}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>

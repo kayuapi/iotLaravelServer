@@ -12,8 +12,17 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('chmboxWelcome');
 });
+
+Route::get('/contact-us', function () {
+    return view('chmboxContactUs');
+});
+
+Route::get('/demo', function () {
+    return view('chmboxLogin');
+});
+
 
 Auth::routes();
 
@@ -23,8 +32,8 @@ Route::get('/passcode', 'ShowPasscode')->name('showPasscode');
 Route::post('/compartments/borrow', 'CompartmentsController@borrow')->name('compartments.borrow');
 
 
-//Route::post('/compartments/borrow', 
-//    [ 'as' => 'compartments.borrow', 
+//Route::post('/compartments/borrow',
+//    [ 'as' => 'compartments.borrow',
 //      'uses' => 'CompartmentsController@borrow'
 //    ]);
 
