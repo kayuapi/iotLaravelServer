@@ -37,7 +37,7 @@ class CompartmentsController extends Controller
     public function index()
     {
         $compartments = Compartment::where('emptied',0)->get();
-        $compartments = Compartment::all();
+        //$compartments = Compartment::all();
 
         $itemCount = $compartments->groupBy(function ($entry, $key) {return Item::find($entry['item_id'])->name;})
                                   ->map(function ($item_id) {return $item_id->count();});
