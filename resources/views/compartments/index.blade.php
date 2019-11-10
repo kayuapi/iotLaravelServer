@@ -11,7 +11,7 @@
 				</div>
 				@if(count($compartments) > -1)
 				@foreach($collection as $key=>$value)
-				<button {{ $canBorrow ? 'disabled' : '' }} name="entertainmentUnit" class="btn btn-sq-lg btn-primary" data-toggle="modal" data-target="#myModal" data-item={{ $key }}>
+				<button {{ $canBorrow ? 'disabled' : '' }} name="entertainmentUnit" class="btn btn-sq-lg btn-primary" data-toggle="modal" data-target="#myModal" data-item="{{ $key }}">
 						<i class="{{ $value["icon"] }} fa-5x"></i><br/>
 						{{ $key }} <br> Available Unit: {{ $value["count"] }}
 				</button>
@@ -43,8 +43,8 @@
 						 'class' => 'form'
 						]) !!}
 					{!! Form::hidden('item', '', ['id' => 'compartment-item']) !!}
-					{!!	Form::submit('Click Me!'); !!}
-					  <button type="submit" class="btn btn-primary" data-dismiss="modal">Borrow</button><button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+					{!!	Form::submit('Borrow', ['class'=>'btn btn-primary']) !!}
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
 					{!! Form::close() !!}
 					</div>
 

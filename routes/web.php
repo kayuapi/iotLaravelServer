@@ -23,12 +23,12 @@ Route::get('/demo', function () {
     return view('chmboxLogin');
 });
 
-Route::get('/.well-known/acme-challenge/qt9KpE4Qk_AN4oK-zJjs9mFKdESh28ODuD6vzOGywnM', function () {
-    return ('qt9KpE4Qk_AN4oK-zJjs9mFKdESh28ODuD6vzOGywnM');
+Route::get('/.well-known/acme-challenge/MXnh3rf9A6Mhj-nlJkXS11aedfxKp9ThgAjlY6a7RyI', function () {
+    return ('MXnh3rf9A6Mhj-nlJkXS11aedfxKp9ThgAjlY6a7RyI');
 });
 
-Route::get('/.well-known/acme-challenge/YXSlmIDF6-rWzO0Ioc9t5GRO0xSwsw0qSQLThbGotac', function () {
-    return ('YXSlmIDF6-rWzO0Ioc9t5GRO0xSwsw0qSQLThbGotac');
+Route::get('/.well-known/acme-challenge/a5xUmNRWmcz5PngkZrrEAfl8pxluAEZQigCxIqy5Y_E', function () {
+    return ('a5xUmNRWmcz5PngkZrrEAfl8pxluAEZQigCxIqy5Y_E');
 });
 
 Auth::routes();
