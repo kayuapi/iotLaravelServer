@@ -18,19 +18,6 @@ class CompartmentsTableSeeder extends Seeder
 
         DB::statement("SET foreign_key_checks=1");
 
-
-        DB::table('compartments')->insert([
-            'passcode' => Str::random(6),
-            'emptied' => 0,
-            'item_id' => 1,
-        ]);
-
-        DB::table('compartments')->insert([
-            'passcode' => Str::random(6),
-            'emptied' => 0,
-            'item_id' => 2,
-        ]);
-
         DB::table('compartments')->insert([
             'passcode' => Str::random(6),
             'emptied' => 0,
