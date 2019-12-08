@@ -21,8 +21,14 @@
 						@foreach($records as $key=>$record)
 						<tr>
 						  <th scope="row">{{$key+1}}</th>
-                                                        <td>Your passcode is {{$record->passcode}}. You {{$record->status}}ed {{$record->compartment['item']['name']}} at {{$record->created_at}}.</td>
-						</tr>
+                            @if ($record->status === 'toreturn')
+                                <td>Your return passcode is {{$record->passcode}}. Please return {{$record->compartment['item']['name']}} by {{$record->created_at + 3600}}.</td>
+						    @elseif ($record->status === 'returned')
+                                <td>Your returned {{$record->compartment['item']['name']}} at {{$record->created_at}}.</td>
+                            @else
+                                <td>Your borrowed passcode is {{$record->passcode}}. You borrowed {{$record->compartment['item']['name']}} at {{$record->created_at}}.</td>
+                            @endif
+                        </tr>
 						@endforeach
 					  </tbody>
 					</table>

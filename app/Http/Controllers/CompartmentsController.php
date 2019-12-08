@@ -120,6 +120,13 @@ class CompartmentsController extends Controller
             $compartment->passcode = $request->input('passcode');
             $compartment->save();
 
+            $record = new Record;
+            $record->compartment_id = $compartment->id;
+            $record->user_id = Auth::id();
+            $record->status = 'toreturn';
+            $record->passcode = $compartment->passcode;
+            $record->save();
+
             $email = Record::where('compartment_id', $id)->orderBy('updated_at', 'desc')->first()->user->email;
 
             Mail::to($email)->send(new CompartmentCodeOrdered($compartment));
@@ -136,7 +143,7 @@ class CompartmentsController extends Controller
             $record = new Record;
             $record->compartment_id = $id;
             $record->user_id = $userId;
-            $record->status = 'return';
+            $record->status = 'returned';
             $record->passcode = $compartment->passcode;
             $record->save();
 
