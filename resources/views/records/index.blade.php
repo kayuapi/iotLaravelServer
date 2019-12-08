@@ -21,7 +21,7 @@
 						@foreach($records as $key=>$record)
 						<tr>
 						  <th scope="row">{{$key+1}}</th>
-                                                        <td>You {{$record->status}}ed {{$record->compartment['item']['name']}} at {{$record->created_at}}</td>
+                                                        <td>Your passcode is {{$record->passcode}}. You {{$record->status}}ed {{$record->compartment['item']['name']}} at {{$record->created_at}}.</td>
 						</tr>
 						@endforeach
 					  </tbody>
@@ -29,8 +29,8 @@
 				</div>
                                 {{$records->links()}};
 
-				
-						
+
+
         </div>
 
 
