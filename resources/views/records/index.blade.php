@@ -22,7 +22,7 @@
 						<tr>
 						  <th scope="row">{{$key+1}}</th>
                             @if ($record->status === 'toreturn')
-                                <td>Your return passcode is {{$record->passcode}}. Please return {{$record->compartment['item']['name']}} by {{$record->created_at + 3600}}.</td>
+                                <td>Your return passcode is {{$record->passcode}}. Please return {{$record->compartment['item']['name']}} within an hour.</td>
 						    @elseif ($record->status === 'returned')
                                 <td>Your returned {{$record->compartment['item']['name']}} at {{$record->created_at}}.</td>
                             @else
