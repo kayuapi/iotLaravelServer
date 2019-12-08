@@ -120,9 +120,10 @@ class CompartmentsController extends Controller
             $compartment->passcode = $request->input('passcode');
             $compartment->save();
 
+            $userId = Record::where('compartment_id', $id)->orderBy('updated_at', 'desc')->first()->user_id;
             $record = new Record;
             $record->compartment_id = $compartment->id;
-            $record->user_id = Auth::id();
+            $record->user_id = $userId;
             $record->status = 'toreturn';
             $record->passcode = $compartment->passcode;
             $record->save();
